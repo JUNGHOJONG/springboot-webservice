@@ -37,6 +37,14 @@ public class PostsService {
         return id;
     }
 
+    @Transactional
+    public void delete(Long id) {
+        // 왜 deleteById로 할 경우에는 JSON에러가 나올까....
+        Posts post = postsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다." + id));
+        postsRepository.delete(post);
+    }
+
     public List<PostsListResponseDto> findAllDesc() {
         return postsRepository.findAllDesc().stream()
                 .map(PostsListResponseDto::new)
